@@ -36,6 +36,8 @@ ADD buildout-docker.cfg /opt/mytardis/webapp/
 RUN chown mytardis /opt/mytardis/webapp/buildout-docker.cfg
 ADD wsgi.py /opt/mytardis/webapp/
 RUN chown mytardis /opt/mytardis/webapp/wsgi.py
+ADD settings.py /opt/mytardis/webapp/tardis/
+RUN chown mytardis /opt/mytardis/webapp/tardis/settings.py
 USER mytardis
 RUN python bootstrap.py -v 1.7.1
 RUN ./bin/buildout -c buildout-docker.cfg
@@ -62,7 +64,8 @@ RUN ./bin/buildout -c buildout-docker.cfg
 
 # RUN mkdir /mytardis_store /mytardis_staging
 USER root
-VOLUME ["/data", "/var/log", "/mytardis_store", "/mytardis_staging"]
+RUN mkdir /mytardis_settings
+VOLUME ["/mytardis_settings", "/data", "/var/log", "/mytardis_store"]
 
 EXPOSE 22
 EXPOSE 8000
